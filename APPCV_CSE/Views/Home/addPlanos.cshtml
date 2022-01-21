@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "addPlanos";
+}
+
+<div class="row gutters-tiny push" id="Planos">
+    <div class="col-12">
+        <div class="block">
+            <div class="p-3 mb-2 bg-gd-sea" >
+                <h3 class="block-title">Actualizar Planos del Municipio</h3>
+            </div>
+            <div class="block-content">
+                <div class="form-group row">
+                    <div class="col-lg-6">
+                        <label>Departamento</label>
+                        <select class="form-control" id="example-input1-group1" name="example-input1-group1"
+                                data-bind="options: lstDpto, value: idDpto, optionsValue:'id', optionsText:'valor', optionsCaption: 'Seleccione...', event: {change: filterMuni}"></select>
+                    </div>
+                    <div class="col-lg-6">
+                        <label>Municipio</label>
+                        <select class="form-control" data-bind="options: lstMuni, value: idMuni, optionsValue:'id', optionsText:'valor', optionsCaption: 'Seleccione...'"></select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-6">
+                        <label>Mapa del Municpio.</label>
+                        <input type="file" class="form-control" id="mapa">
+                    </div>
+                    <div class="col-lg-6">
+                        <label>Plano del Municpio.</label>
+                        <input type="file" class="form-control" id="plano">
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <button class="btn btn-outline-info" data-bind="click: save">
+                    <i class="fa fa-save"></i>
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    
+    <script src="~/Scripts/knockout/knockout-3.4.2.js"></script>
+<script src="~/Scripts/knockout/knockout.mapping-latest.js"></script>
+<script type="module" src="~/Scripts/JS/VisualizarDatosCV/addPlanos.js?@DateTime.Now.ToString("yyyyMMdd.hh")"></script>
+    }

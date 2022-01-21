@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DBJUNTASModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cat_Departamento">
+          <Key>
+            <PropertyRef Name="id_CatDepartamento" />
+          </Key>
+          <Property Name="id_CatDepartamento" Type="int" Nullable="false" />
+          <Property Name="nomDepartamento" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="cat_Municipio">
+          <Key>
+            <PropertyRef Name="id_CatMunicipio" />
+          </Key>
+          <Property Name="id_CatMunicipio" Type="int" Nullable="false" />
+          <Property Name="nomMunicipio" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="1000" />
+          <Property Name="id_CatDepartamento" Type="int" Nullable="false" />
+          <Property Name="imgPlano" Type="varchar(max)" />
+          <Property Name="imdMapa" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="cat_TipoCV">
+          <Key>
+            <PropertyRef Name="idTipoCV" />
+          </Key>
+          <Property Name="idTipoCV" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="30" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="30" />
+          <Property Name="Activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="CentrosVotacion">
+          <Key>
+            <PropertyRef Name="id_CentroVotacion" />
+          </Key>
+          <Property Name="id_CentroVotacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nomCenVotacion" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="direccionCenVotacion" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="ubicacionCenVotacion" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="derroteroCenVotacion" Type="varchar" MaxLength="1000" />
+          <Property Name="circunscripcionCenVotacion" Type="varchar" MaxLength="1000" />
+          <Property Name="descripcion" Type="varchar" MaxLength="1000" />
+          <Property Name="idTipoCV" Type="int" />
+          <Property Name="latitude" Type="float" />
+          <Property Name="longitude" Type="float" />
+          <Property Name="fotoFachada" Type="varchar(max)" />
+          <Property Name="Estado" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="id_CatMunicipio" Type="int" Nullable="false" />
+          <Property Name="imgPlano" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="GaleriaCentroVotacion">
+          <Key>
+            <PropertyRef Name="idGaleriaCentro" />
+          </Key>
+          <Property Name="idGaleriaCentro" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="fotoUrl" Type="varchar(max)" Nullable="false" />
+          <Property Name="fechaHoraCreacion" Type="datetime" Nullable="false" />
+          <Property Name="id_CentroVotacion" Type="int" />
+        </EntityType>
+        <EntityType Name="JRV">
+          <Key>
+            <PropertyRef Name="id_JRV" />
+          </Key>
+          <Property Name="id_JRV" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="codeJRV" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="cantInscritos" Type="int" />
+          <Property Name="cantVerificados" Type="int" />
+          <Property Name="id_CentroVotacion" Type="int" />
+        </EntityType>
+        <Association Name="FK_CentroVotacion_JRV">
+          <End Role="CentrosVotacion" Type="Self.CentrosVotacion" Multiplicity="0..1" />
+          <End Role="JRV" Type="Self.JRV" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CentrosVotacion">
+              <PropertyRef Name="id_CentroVotacion" />
+            </Principal>
+            <Dependent Role="JRV">
+              <PropertyRef Name="id_CentroVotacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Galeria_CentroVotacion">
+          <End Role="CentrosVotacion" Type="Self.CentrosVotacion" Multiplicity="0..1" />
+          <End Role="GaleriaCentroVotacion" Type="Self.GaleriaCentroVotacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CentrosVotacion">
+              <PropertyRef Name="id_CentroVotacion" />
+            </Principal>
+            <Dependent Role="GaleriaCentroVotacion">
+              <PropertyRef Name="id_CentroVotacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Municipio_CentroVotacion">
+          <End Role="cat_Municipio" Type="Self.cat_Municipio" Multiplicity="1" />
+          <End Role="CentrosVotacion" Type="Self.CentrosVotacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cat_Municipio">
+              <PropertyRef Name="id_CatMunicipio" />
+            </Principal>
+            <Dependent Role="CentrosVotacion">
+              <PropertyRef Name="id_CatMunicipio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Municipios_Departamento">
+          <End Role="cat_Departamento" Type="Self.cat_Departamento" Multiplicity="1" />
+          <End Role="cat_Municipio" Type="Self.cat_Municipio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cat_Departamento">
+              <PropertyRef Name="id_CatDepartamento" />
+            </Principal>
+            <Dependent Role="cat_Municipio">
+              <PropertyRef Name="id_CatDepartamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="TotalConsolidado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="iddpto" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="DBJUNTASModelStoreContainer">
+          <EntitySet Name="cat_Departamento" EntityType="Self.cat_Departamento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cat_Municipio" EntityType="Self.cat_Municipio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cat_TipoCV" EntityType="Self.cat_TipoCV" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CentrosVotacion" EntityType="Self.CentrosVotacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GaleriaCentroVotacion" EntityType="Self.GaleriaCentroVotacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JRV" EntityType="Self.JRV" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CentroVotacion_JRV" Association="Self.FK_CentroVotacion_JRV">
+            <End Role="CentrosVotacion" EntitySet="CentrosVotacion" />
+            <End Role="JRV" EntitySet="JRV" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Galeria_CentroVotacion" Association="Self.FK_Galeria_CentroVotacion">
+            <End Role="CentrosVotacion" EntitySet="CentrosVotacion" />
+            <End Role="GaleriaCentroVotacion" EntitySet="GaleriaCentroVotacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Municipio_CentroVotacion" Association="Self.FK_Municipio_CentroVotacion">
+            <End Role="cat_Municipio" EntitySet="cat_Municipio" />
+            <End Role="CentrosVotacion" EntitySet="CentrosVotacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Municipios_Departamento" Association="Self.FK_Municipios_Departamento">
+            <End Role="cat_Departamento" EntitySet="cat_Departamento" />
+            <End Role="cat_Municipio" EntitySet="cat_Municipio" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBJUNTASModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DBJUNTASEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cat_Departamento" EntityType="DBJUNTASModel.cat_Departamento" />
+          <EntitySet Name="cat_Municipio" EntityType="DBJUNTASModel.cat_Municipio" />
+          <EntitySet Name="cat_TipoCV" EntityType="DBJUNTASModel.cat_TipoCV" />
+          <EntitySet Name="CentrosVotacion" EntityType="DBJUNTASModel.CentrosVotacion" />
+          <EntitySet Name="GaleriaCentroVotacion" EntityType="DBJUNTASModel.GaleriaCentroVotacion" />
+          <EntitySet Name="JRV" EntityType="DBJUNTASModel.JRV" />
+          <AssociationSet Name="FK_Municipios_Departamento" Association="DBJUNTASModel.FK_Municipios_Departamento">
+            <End Role="cat_Departamento" EntitySet="cat_Departamento" />
+            <End Role="cat_Municipio" EntitySet="cat_Municipio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Municipio_CentroVotacion" Association="DBJUNTASModel.FK_Municipio_CentroVotacion">
+            <End Role="cat_Municipio" EntitySet="cat_Municipio" />
+            <End Role="CentrosVotacion" EntitySet="CentrosVotacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CentroVotacion_JRV" Association="DBJUNTASModel.FK_CentroVotacion_JRV">
+            <End Role="CentrosVotacion" EntitySet="CentrosVotacion" />
+            <End Role="JRV" EntitySet="JRV" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Galeria_CentroVotacion" Association="DBJUNTASModel.FK_Galeria_CentroVotacion">
+            <End Role="CentrosVotacion" EntitySet="CentrosVotacion" />
+            <End Role="GaleriaCentroVotacion" EntitySet="GaleriaCentroVotacion" />
+          </AssociationSet>
+          <FunctionImport Name="TotalConsolidado" ReturnType="Collection(DBJUNTASModel.TotalConsolidado_Result)">
+            <Parameter Name="iddpto" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="cat_Departamento">
+          <Key>
+            <PropertyRef Name="id_CatDepartamento" />
+          </Key>
+          <Property Name="id_CatDepartamento" Type="Int32" Nullable="false" />
+          <Property Name="nomDepartamento" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="cat_Municipio" Relationship="DBJUNTASModel.FK_Municipios_Departamento" FromRole="cat_Departamento" ToRole="cat_Municipio" />
+        </EntityType>
+        <EntityType Name="cat_Municipio">
+          <Key>
+            <PropertyRef Name="id_CatMunicipio" />
+          </Key>
+          <Property Name="id_CatMunicipio" Type="Int32" Nullable="false" />
+          <Property Name="nomMunicipio" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="id_CatDepartamento" Type="Int32" Nullable="false" />
+          <Property Name="imgPlano" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="imdMapa" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="cat_Departamento" Relationship="DBJUNTASModel.FK_Municipios_Departamento" FromRole="cat_Municipio" ToRole="cat_Departamento" />
+          <NavigationProperty Name="CentrosVotacion" Relationship="DBJUNTASModel.FK_Municipio_CentroVotacion" FromRole="cat_Municipio" ToRole="CentrosVotacion" />
+        </EntityType>
+        <EntityType Name="cat_TipoCV">
+          <Key>
+            <PropertyRef Name="idTipoCV" />
+          </Key>
+          <Property Name="idTipoCV" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Activo" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="CentrosVotacion">
+          <Key>
+            <PropertyRef Name="id_CentroVotacion" />
+          </Key>
+          <Property Name="id_CentroVotacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nomCenVotacion" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="direccionCenVotacion" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="ubicacionCenVotacion" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="derroteroCenVotacion" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="circunscripcionCenVotacion" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="idTipoCV" Type="Int32" />
+          <Property Name="latitude" Type="Double" />
+          <Property Name="longitude" Type="Double" />
+          <Property Name="fotoFachada" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Estado" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="id_CatMunicipio" Type="Int32" Nullable="false" />
+          <Property Name="imgPlano" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="cat_Municipio" Relationship="DBJUNTASModel.FK_Municipio_CentroVotacion" FromRole="CentrosVotacion" ToRole="cat_Municipio" />
+          <NavigationProperty Name="JRV" Relationship="DBJUNTASModel.FK_CentroVotacion_JRV" FromRole="CentrosVotacion" ToRole="JRV" />
+          <NavigationProperty Name="GaleriaCentroVotacion" Relationship="DBJUNTASModel.FK_Galeria_CentroVotacion" FromRole="CentrosVotacion" ToRole="GaleriaCentroVotacion" />
+        </EntityType>
+        <EntityType Name="GaleriaCentroVotacion">
+          <Key>
+            <PropertyRef Name="idGaleriaCentro" />
+          </Key>
+          <Property Name="idGaleriaCentro" Type="Guid" Nullable="false" />
+          <Property Name="fotoUrl" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="fechaHoraCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_CentroVotacion" Type="Int32" />
+          <NavigationProperty Name="CentrosVotacion" Relationship="DBJUNTASModel.FK_Galeria_CentroVotacion" FromRole="GaleriaCentroVotacion" ToRole="CentrosVotacion" />
+        </EntityType>
+        <EntityType Name="JRV">
+          <Key>
+            <PropertyRef Name="id_JRV" />
+          </Key>
+          <Property Name="id_JRV" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="codeJRV" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cantInscritos" Type="Int32" />
+          <Property Name="cantVerificados" Type="Int32" />
+          <Property Name="id_CentroVotacion" Type="Int32" />
+          <NavigationProperty Name="CentrosVotacion" Relationship="DBJUNTASModel.FK_CentroVotacion_JRV" FromRole="JRV" ToRole="CentrosVotacion" />
+        </EntityType>
+        <Association Name="FK_Municipios_Departamento">
+          <End Type="DBJUNTASModel.cat_Departamento" Role="cat_Departamento" Multiplicity="1" />
+          <End Type="DBJUNTASModel.cat_Municipio" Role="cat_Municipio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cat_Departamento">
+              <PropertyRef Name="id_CatDepartamento" />
+            </Principal>
+            <Dependent Role="cat_Municipio">
+              <PropertyRef Name="id_CatDepartamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Municipio_CentroVotacion">
+          <End Type="DBJUNTASModel.cat_Municipio" Role="cat_Municipio" Multiplicity="1" />
+          <End Type="DBJUNTASModel.CentrosVotacion" Role="CentrosVotacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cat_Municipio">
+              <PropertyRef Name="id_CatMunicipio" />
+            </Principal>
+            <Dependent Role="CentrosVotacion">
+              <PropertyRef Name="id_CatMunicipio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CentroVotacion_JRV">
+          <End Type="DBJUNTASModel.CentrosVotacion" Role="CentrosVotacion" Multiplicity="0..1" />
+          <End Type="DBJUNTASModel.JRV" Role="JRV" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CentrosVotacion">
+              <PropertyRef Name="id_CentroVotacion" />
+            </Principal>
+            <Dependent Role="JRV">
+              <PropertyRef Name="id_CentroVotacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Galeria_CentroVotacion">
+          <End Type="DBJUNTASModel.CentrosVotacion" Role="CentrosVotacion" Multiplicity="0..1" />
+          <End Type="DBJUNTASModel.GaleriaCentroVotacion" Role="GaleriaCentroVotacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CentrosVotacion">
+              <PropertyRef Name="id_CentroVotacion" />
+            </Principal>
+            <Dependent Role="GaleriaCentroVotacion">
+              <PropertyRef Name="id_CentroVotacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="TotalConsolidado_Result">
+          <Property Type="Guid" Name="mikey" Nullable="true" />
+          <Property Type="Int32" Name="idDpto" Nullable="true" />
+          <Property Type="String" Name="municipio" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="URBANOCV" Nullable="true" />
+          <Property Type="Int32" Name="RURALCV" Nullable="true" />
+          <Property Type="Int32" Name="TOTALCV" Nullable="true" />
+          <Property Type="Int32" Name="URBANOJRV" Nullable="true" />
+          <Property Type="Int32" Name="RURALJRV" Nullable="true" />
+          <Property Type="Int32" Name="TOTALJRV" Nullable="true" />
+          <Property Type="Int32" Name="URBANOINSCRITOS" Nullable="true" />
+          <Property Type="Int32" Name="RURALINSCRITOS" Nullable="true" />
+          <Property Type="Int32" Name="TOTALINSCRITOS" Nullable="true" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBJUNTASModelStoreContainer" CdmEntityContainer="DBJUNTASEntities">
+          <EntitySetMapping Name="cat_Departamento">
+            <EntityTypeMapping TypeName="DBJUNTASModel.cat_Departamento">
+              <MappingFragment StoreEntitySet="cat_Departamento">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="nomDepartamento" ColumnName="nomDepartamento" />
+                <ScalarProperty Name="id_CatDepartamento" ColumnName="id_CatDepartamento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_Municipio">
+            <EntityTypeMapping TypeName="DBJUNTASModel.cat_Municipio">
+              <MappingFragment StoreEntitySet="cat_Municipio">
+                <ScalarProperty Name="imdMapa" ColumnName="imdMapa" />
+                <ScalarProperty Name="imgPlano" ColumnName="imgPlano" />
+                <ScalarProperty Name="id_CatDepartamento" ColumnName="id_CatDepartamento" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="nomMunicipio" ColumnName="nomMunicipio" />
+                <ScalarProperty Name="id_CatMunicipio" ColumnName="id_CatMunicipio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_TipoCV">
+            <EntityTypeMapping TypeName="DBJUNTASModel.cat_TipoCV">
+              <MappingFragment StoreEntitySet="cat_TipoCV">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="idTipoCV" ColumnName="idTipoCV" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CentrosVotacion">
+            <EntityTypeMapping TypeName="DBJUNTASModel.CentrosVotacion">
+              <MappingFragment StoreEntitySet="CentrosVotacion">
+                <ScalarProperty Name="imgPlano" ColumnName="imgPlano" />
+                <ScalarProperty Name="id_CatMunicipio" ColumnName="id_CatMunicipio" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="fotoFachada" ColumnName="fotoFachada" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="idTipoCV" ColumnName="idTipoCV" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="circunscripcionCenVotacion" ColumnName="circunscripcionCenVotacion" />
+                <ScalarProperty Name="derroteroCenVotacion" ColumnName="derroteroCenVotacion" />
+                <ScalarProperty Name="ubicacionCenVotacion" ColumnName="ubicacionCenVotacion" />
+                <ScalarProperty Name="direccionCenVotacion" ColumnName="direccionCenVotacion" />
+                <ScalarProperty Name="nomCenVotacion" ColumnName="nomCenVotacion" />
+                <ScalarProperty Name="id_CentroVotacion" ColumnName="id_CentroVotacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GaleriaCentroVotacion">
+            <EntityTypeMapping TypeName="DBJUNTASModel.GaleriaCentroVotacion">
+              <MappingFragment StoreEntitySet="GaleriaCentroVotacion">
+                <ScalarProperty Name="id_CentroVotacion" ColumnName="id_CentroVotacion" />
+                <ScalarProperty Name="fechaHoraCreacion" ColumnName="fechaHoraCreacion" />
+                <ScalarProperty Name="fotoUrl" ColumnName="fotoUrl" />
+                <ScalarProperty Name="idGaleriaCentro" ColumnName="idGaleriaCentro" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JRV">
+            <EntityTypeMapping TypeName="DBJUNTASModel.JRV">
+              <MappingFragment StoreEntitySet="JRV">
+                <ScalarProperty Name="id_CentroVotacion" ColumnName="id_CentroVotacion" />
+                <ScalarProperty Name="cantVerificados" ColumnName="cantVerificados" />
+                <ScalarProperty Name="cantInscritos" ColumnName="cantInscritos" />
+                <ScalarProperty Name="codeJRV" ColumnName="codeJRV" />
+                <ScalarProperty Name="id_JRV" ColumnName="id_JRV" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="TotalConsolidado" FunctionName="DBJUNTASModel.Store.TotalConsolidado">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBJUNTASModel.TotalConsolidado_Result">
+                <ScalarProperty Name="mikey" ColumnName="mikey" />
+                <ScalarProperty Name="idDpto" ColumnName="idDpto" />
+                <ScalarProperty Name="municipio" ColumnName="municipio" />
+                <ScalarProperty Name="URBANOCV" ColumnName="URBANOCV" />
+                <ScalarProperty Name="RURALCV" ColumnName="RURALCV" />
+                <ScalarProperty Name="TOTALCV" ColumnName="TOTALCV" />
+                <ScalarProperty Name="URBANOJRV" ColumnName="URBANOJRV" />
+                <ScalarProperty Name="RURALJRV" ColumnName="RURALJRV" />
+                <ScalarProperty Name="TOTALJRV" ColumnName="TOTALJRV" />
+                <ScalarProperty Name="URBANOINSCRITOS" ColumnName="URBANOINSCRITOS" />
+                <ScalarProperty Name="RURALINSCRITOS" ColumnName="RURALINSCRITOS" />
+                <ScalarProperty Name="TOTALINSCRITOS" ColumnName="TOTALINSCRITOS" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

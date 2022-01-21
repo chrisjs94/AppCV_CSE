@@ -1,0 +1,192 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<!-- Icon Navigation -->
+<div class="row gutters-tiny push" id="RegistrosCV">
+    <div class="col-12">
+
+        <div class="block">
+            <div class="p-3 mb-2 bg-gd-sea">
+                <h3 class="block-title">Datos del CV</h3>
+            </div>
+            <div class="block-content">
+                <div class="form-group row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="example-input1-group1"
+                                   data-bind="value: CV" name="example-input1-group1" placeholder="Escribe o Buscar por código CV">
+
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-info dropdown-toggle" id="btnGroupVerticalDrop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opciones</button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1" style="">
+                                    <a class="dropdown-item" href="javascript:void(0)" data-bind="click: search">
+                                        <i class="fa fa-search mr-5"></i>Buscar
+                                    </a>
+                                    @if (User.IsInRole("ADMIN")){
+                                    <a class="dropdown-item" href="javascript:void(0)" data-bind="click: save">
+                                        <i class="fa fa-save mr-5"></i>Guardar
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:void(0)" data-bind="click: clear">
+                                        <i class="fa fa-plus mr-5"></i>Nuevo Registro
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:void(0)" data-bind="click: clear">
+                                        <i class="fa fa-trash mr-5"></i>Limpiar campos
+                                    </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (User.IsInRole("ADMIN"))
+                {
+                    <div class="form-group row">
+
+                        <div class="col-lg-4">
+                            <label>Tipo CV</label>
+                            <select class="form-control" id="example-input1-group1" name="example-input1-group1"
+                                    data-bind="options: lstTipoCV, value: idTipoCV, optionsValue:'id', optionsText:'valor', optionsCaption: 'Seleccione...'"></select>
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Departamento</label>
+                            <select class="form-control" id="example-input1-group1" name="example-input1-group1"
+                                    data-bind="options: lstDpto, value: idDpto, optionsValue:'id', optionsText:'valor', optionsCaption: 'Seleccione...', event: {change: filterMuni}">
+                            </select>
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Municipio</label>
+                            <select class="form-control" data-bind="options: lstMuni, value: idMuni, optionsValue:'id', optionsText:'valor', optionsCaption: 'Seleccione...'"></select>
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-4">
+                            <label>Local</label>
+                            <input type="text" class="form-control"
+                                   data-bind="value: local">
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Direccion</label>
+                            <input type="text" class="form-control"
+                                   data-bind="value: direccion">
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Derrotero.</label>
+                            <input type="text" class="form-control"
+                                   data-bind="value: derrotero">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-4">
+                            <label>Circunscripcion</label>
+                            <input type="text" class="form-control"
+                                   data-bind="value: circunscripcion"
+                                   name="example-input1-group1" placeholder="">
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Descripcion</label>
+                            <input type="text" class="form-control"
+                                   data-bind="value: descripcion"
+                                   placeholder="">
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Archivos Adjuntos.</label>
+                            <input type="file" class="form-control" id="lstimages" multiple>
+                        </div>
+                        @*<div class="col-lg-4">
+                                <label>Plano general del Municipio</label>
+                                <input type="file" class="form-control" id="plano" >
+                            </div>*@
+
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="block">
+            <div class="p-3 mb-2 bg-gd-sea text-white">
+                <h3 class="block-title">Juntas Receptoras Asociadas</h3>
+            </div>
+            <div class="block-content">
+                @if (User.IsInRole("ADMIN"))
+                {
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <strong>Agregar JRV</strong>
+                            <button type="button" class="btn btn-outline-info btn-sm"
+                                    data-bind="click: addJRV">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+                <div class="form-group row">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Codigo JRV</th>
+                                    <th>Cantidad Inscritos</th>
+                                    <th>Cantidad de Verificados</th>
+                                    @if (User.IsInRole("ADMIN"))
+                                    {
+                                        <th></th>
+                                    }
+                                </tr>
+                            </thead>
+                            <!--ko if: lstJRV().length == 0-->
+                            <tbody>
+                                <tr class="text-center">
+                                    @if (User.IsInRole("ADMIN"))
+                                    {
+                                        <td colspan="4">
+                                            <h4>Sin Registros</h4>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td colspan="3">
+                                            <h4>Sin Registros</h4>
+                                        </td>
+                                    }
+                                </tr>
+                            </tbody>
+                            <!--/ko-->
+                            <tbody data-bind="foreach: lstJRV">
+                                <tr>
+                                    <td>
+                                        <input type="text" data-bind="value: codigoJVR" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input type="number" data-bind="value: cant_inscritos" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input type="number" data-bind="value: cant_verificados" class="form-control" />
+                                    </td>
+                                    @if (User.IsInRole("ADMIN"))
+                                    {
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                    data-bind="click: function(data, event){ $root.eliminarJRV($data, $index()) }">
+                                                <i class="fa fa-remove"></i>
+                                            </button>
+                                        </td>
+                                    }
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- END Icon Navigation -->
+
+@section scripts{
+    <script src="~/Scripts/knockout/knockout-3.4.2.js"></script>
+    <script src="~/Scripts/knockout/knockout.mapping-latest.js"></script>
+    <script type="module" src="~/Scripts/JS/Registro/RegistrosCV.js?@DateTime.Now.ToString("yyyyMMdd.hh")"></script>
+}

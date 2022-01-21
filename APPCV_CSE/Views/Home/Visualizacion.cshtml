@@ -1,0 +1,227 @@
+﻿
+@{
+    ViewBag.Title = "Visualizacion";
+}
+<link rel="stylesheet" href="~/Content/assets/js/plugins/slick/slick.css">
+<link rel="stylesheet" href="~/Content/assets/js/plugins/slick/slick-theme.css">
+<div class="block" id="Visualizar">
+
+    <div class="block-content" data-bind="visible:!verinfo() ">
+        <div class="block-header">
+           <h4>Lista de Centros de Votación</h4>
+        </div>
+        <div class="block-content-full">
+
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>Departamento</label>
+                    <select class="form-control" data-bind="options: lstdpto, value: iddpto, optionsValue:'id', optionsText:'valor', optionsCaption: 'Seleccione...', event:{change: filterMuni}"></select>
+                    <label>Municipio</label>
+                    <select class="form-control" data-bind="options: lstmuni, value: idmuni, optionsValue:'id', optionsText:'valor', optionsCaption: 'Seleccione...', event:{change: filterCV}"></select>
+                    
+                    <button type="button" class="btn btn-outline-info" data-bind="click: function(data, event){ mostrarInfo(null, true) }" title="Informacion de Mapa y planos del municipio"
+                            style="margin-top: 10px">
+                        <i class=" fa fa-eye"></i> Ver Planos y mapa del Municipio
+                    </button>
+
+                </div>
+                <div class="col-9">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Centro de Votación</th>
+                                    <th>Local</th>
+                                    <th>Direccion</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <!--ko if: lstCV().length == 0-->
+                            <tbody>
+                                <tr>
+                                    <td colspan="4">Sin registros por el momento</td>
+                                </tr>
+                            </tbody>
+                            <!--/ko-->
+
+                            <tbody data-bind="foreach: lstCV">
+                                <tr>
+                                    <td data-bind="text:nomCenVotacion">Centro de Votación</td>
+                                    <td data-bind="text: ubicacionCenVotacion">Local</td>
+                                    <td data-bind="text: direccionCenVotacion">Dirección</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-info" data-bind="click: function(data, event){ $root.mostrarInfo(data, false) } " title="Informacion del centro"><i class="fa fa-info"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Project -->
+    <div class="block-content block-content-full" style="display:none" data-bind="visible: verinfo">
+        <div class="block-header">
+            <button type="button" class="btn btn-outline-info" data-bind="click: regresar" title="Regresar"><i class="fa fa-arrow-left"></i></button>
+
+            <h4 data-bind="visible: !verPlanos()">Información del  Centro de Votación</h4>
+            <h4 data-bind="visible: verPlanos">Información del Municipio</h4>
+        </div>
+        <div class="row py-20">
+            <div class="col-sm-4 js-appear-enabled animated fadeIn" data-toggle="appear">
+
+                <h5>Datos Generales <span data-bind="visible: !verPlanos()">del CV:</span>  </h5>
+                <!-- Project Info -->
+                <table class="table table-hover table-borderless mt-20">
+                    <tbody>
+                        <tr>
+                            <td class="font-weight-bold">Departamento</td>
+                            <td data-bind="text: dpto">Company S.A.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Municipio</td>
+                            <td data-bind="text: muni">$10.000</td>
+                        </tr>
+
+                        <tr data-bind="visible: verPlanos">
+                            <td class="font-weight-bold">Total de CV del Municipio</td>
+                            <td data-bind="text: totalCV">10</td>
+                        </tr>
+                        <tr data-bind="visible: !verPlanos()">
+                            <td class="font-weight-bold">Ubicación</td>
+                            <td data-bind="text: local">Web Development</td>
+                        </tr>
+                        <tr data-bind="visible: !verPlanos()">
+                            <td class="font-weight-bold">Dirección</td>
+                            <td data-bind="text: direccion">Web Development</td>
+                        </tr>
+                        <tr data-bind="visible: !verPlanos()">
+                            <!--<td class="font-weight-bold">Circunscripcion</td>-->
+                            <td data-bind="text: circunscripcion"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- END Project Info -->
+                <div data-bind="visible: !verPlanos()">
+                    <!--<h5 class="text-center">Derrotero</h5>-->
+                    <!--<span data-bind="text: derrotero" ></span>-->
+                    <!--<h5 class="text-center" style="margin-top:10px"> JRV del CV </h5>-->
+                    <!-- Project Info -->
+                    <table class="table table-hover table-borderless mt-20">
+
+                        <thead>
+                            <tr>
+                                <td class="font-weight-bold">Código JRV</td>
+                                <td class="font-weight-bold">Inscripciones</td>
+                                <td class="font-weight-bold">Verificados</td>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: lstJRV">
+                            <tr>
+                                <td class="font-weight-bold" data-bind="text: codeJRV">Departamento</td>
+                                <td data-bind="text: cantInscritos">Company S.A.</td>
+                                <td data-bind="text: cantVerificados">Inscripciones</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- END Project Info -->
+                </div>
+                
+            </div>
+            <div class="col-sm-8" data-bind="visible: !verPlanos()">
+                <h5>Imagen del CV</h5>
+             
+                <div class="single-item" data-bind="foreach: lstIMG" id="lstIMG">
+                    <div>
+                        <span class='zoom' data-bind="attr: {id: 'ex'+($index()+1)}">
+                            <img class="img-fluid mx-auto d-block" data-bind="attr:{src: $data}"  style="width:100%" >
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-8" data-bind="visible: verPlanos">
+              
+                <div class="single-item">
+                    <div>
+                        <h5>Plano del Municipio</h5>
+                        <span class='zoom ex' data-bind="">
+                            <img class="img-fluid mx-auto d-block" data-bind="attr:{src: Plano}" style="width:100%">
+                        </span>
+                    </div>
+                   
+                    <div>
+                        <h5>Mapa del Municipio</h5>
+                        <span class='zoom ex' data-bind="">
+                            <img class="img-fluid mx-auto d-block" data-bind="attr:{src: Mapa}" style="width:100%">
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<style>
+    /* styles unrelated to zoom */
+    * {
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    p {
+        position: absolute;
+        top: 3px;
+        right: 28px;
+        color: #555;
+        font: bold 13px/1 sans-serif;
+    }
+
+    /* these styles are for the demo, but are not required for the plugin */
+    .zoom {
+        display: inline-block;
+        position: relative;
+    }
+
+        /* magnifying glass icon */
+        .zoom:after {
+            content: '';
+            display: block;
+            width: 33px;
+            height: 33px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: url(icon.png);
+        }
+
+        .zoom img {
+            display: block;
+        }
+
+            .zoom img::selection {
+                background-color: transparent;
+            }
+
+    #ex2 img:hover {
+        cursor: url(grab.cur), default;
+    }
+
+    #ex2 img:active {
+        cursor: url(grabbed.cur), default;
+    }
+</style>
+
+@section scripts{
+<link href="~/Content/assets/js/plugins/slick/slick.css" rel="stylesheet" />
+    <script src="~/Scripts/knockout/knockout-3.4.2.js"></script>
+    <script src="~/Scripts/knockout/knockout.mapping-latest.js"></script>
+    <script src="~/Scripts/JS/VisualizarDatosCV/Visualizacion.js?@DateTime.Now.ToString("yyyyMMdd.hh")"></script>
+    <script src="~/Content/assets/zoomy/jquery.zoom.js"></script>
+<script src="~/Content/assets/js/plugins/slick/slick.min.js"></script>
+}
+

@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Consolidado";
+}
+<div class="block block-themed " style="margin-bottom: 0px">
+    <div class="p-3 mb-2 bg-gd-sea">
+        <h3 class=" text-center"> <span class="fa fa-dou"></span>CONSOLIDADO TOTAL</h3>
+    </div>
+    
+</div>
+    
+<div class="row" id="consolidado">
+
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr bgcolor="#08088A" class="p-3 mb-2 bg-gd-sea text-center" style="color: #FFFFFF" >
+                        <th align="left" width="19%" rowspan="2"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Departamento<br>Municipio</font></th>
+                        <th width="27%" colspan="3"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">C.V.</font></th>
+                        <th width="27%" colspan="3"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">J.R.V.</font></th>
+                        <th width="27%" colspan="3"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Inscritos</font></th>
+                    </tr>
+                    <tr bgcolor="#74B9FF" class=" p-3 mb-2 bg-gd-sea text-center" style="color: #ffffff">
+                        <th width="9%"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Urbano</font></th>
+                        <th width="9%"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Rural</font></th>
+                        <th width="9%"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Total</font></th>
+                        <th width="9%"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Urbano</font></th>
+                        <th width="9%"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Rural</font></th>
+                        <th width="9%"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Total</font></th>
+                        <th width="9%"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Urbano</font></th>
+                        <th width="9%"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Rural</font></th>
+                        <th width="9%"><font face="Geneva, Arial, Helvetica, sans-serif" size="2">Total</font></th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: consolidado">
+                    <tr bgcolor="#74B9FF" nowrap="" style="color: #050202">
+                        <th  class="p-3 mb-2 bg-gd-sea text-center"  width="100%" colspan="11"><font face="Geneva, Arial, Helvetica, sans-serif" size="2" data-bind="text: Dpto">NUEVA SEGOVIA</font></th>
+                    </tr>
+                    <!--ko foreach: listaDpto -->
+                    <tr bgcolor="#FFFFFF" data-bind="attr: {bgcolor:municipio == 'SUBTOTAL'?'#0080FF':'#FFFFFF'}" style="color: #050202">
+                        <td width="19%" data-bind="text: municipio"></td>
+                        <td align="center" width="9%" data-bind="text: URBANOCV"></td>
+                        <td align="center" width="9%" data-bind="text: RURALCV"></td>
+                        <td align="center" width="9%" data-bind="text: TOTALCV"></td>
+                        <td align="center" width="9%" data-bind="text: URBANOJRV"></td>
+                        <td align="center" width="9%" data-bind="text: RURALJRV"></td>
+                        <td align="center" width="9%" data-bind="text: TOTALJRV"></td>
+                        <td align="center" width="9%" data-bind="text: URBANOINSCRITOS"></td>
+                        <td align="center" width="9%" data-bind="text: RURALINSCRITOS"></td>
+                        <td align="center" width="9%" data-bind="text: TOTALINSCRITOS"></td>
+                    </tr>
+                    <!--/ko-->
+                </tbody>
+                <tfoot>
+                    <tr bgcolor="#08088A" data-bind="foreach: TotalConsolidado" style="color: #FFFFFF">
+                        <!--ko if: $data == 'TOTAL NACIONAL'-->
+                        <td class="font-weight-bolder"  data-bind="text: $data"></td>
+                        <!--/ko-->
+                        <!--ko if: $data != 'TOTAL NACIONAL'-->
+                        <td class="font-weight-bolder text-center" data-bind="text: $data"></td>
+                        <!--/ko-->
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/knockout/knockout-3.4.2.js"></script>
+    <script src="~/Scripts/knockout/knockout.mapping-latest.js"></script>
+    <script type="module" src="~/Scripts/JS/Consolidado.js"></script>
+}

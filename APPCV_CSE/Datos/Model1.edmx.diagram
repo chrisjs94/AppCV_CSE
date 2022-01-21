@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d55e0c7f0e8545f1a7b35e86fda39d80" Name="Diagram1">
+        <EntityTypeShape EntityType="DBJUNTASModel.cat_Departamento" Width="1.5" PointX="0.75" PointY="2.625" />
+        <EntityTypeShape EntityType="DBJUNTASModel.cat_Municipio" Width="1.5" PointX="3" PointY="2.25" />
+        <EntityTypeShape EntityType="DBJUNTASModel.cat_TipoCV" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="DBJUNTASModel.CentrosVotacion" Width="1.5" PointX="5.25" PointY="1.25" />
+        <EntityTypeShape EntityType="DBJUNTASModel.GaleriaCentroVotacion" Width="1.5" PointX="7.5" PointY="4" />
+        <EntityTypeShape EntityType="DBJUNTASModel.JRV" Width="1.5" PointX="7.5" PointY="1.125" />
+        <AssociationConnector Association="DBJUNTASModel.FK_Municipios_Departamento" />
+        <AssociationConnector Association="DBJUNTASModel.FK_Municipio_CentroVotacion" />
+        <AssociationConnector Association="DBJUNTASModel.FK_CentroVotacion_JRV" />
+        <AssociationConnector Association="DBJUNTASModel.FK_Galeria_CentroVotacion" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

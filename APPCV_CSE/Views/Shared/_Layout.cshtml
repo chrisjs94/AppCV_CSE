@@ -1,0 +1,244 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <title>@ViewBag.Title - Material Cartografico y Estadísticas para Partidos Politicos - Elecciones Generales 2021</title>
+
+    <meta name="description" content="Aplicacion de Registro de CV">
+    <meta name="author" content="pixelcave">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="Aplicacion de Registro de CV">
+    <meta property="og:site_name" content="Aplicacion de Registro de CV">
+    <meta property="og:description" content="Aplicacion de Registro de CV">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="~/Content/assets/media/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/Content/assets/media/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/assets/media/favicons/apple-touch-icon-180x180.png">
+    <!-- END Icons -->
+    <!-- Stylesheets -->
+    <!-- Fonts and Codebase framework -->
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="~/Content/assets/css/codebase.min.css">
+
+    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
+    <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
+    <link rel="stylesheet" id="css-theme" href="~/Content/assets/css/themes/corporate.min.css">
+    <!-- END Stylesheets -->
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+</head>
+
+<body>
+    <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed page-header-glass page-header-inverse main-content-boxed">
+
+        <!-- Header -->
+        <header id="page-header" style="background-color: #02356D">
+            <!-- Header Content -->
+            <div class="content-header">
+                <!-- Left Section -->
+                <div class="content-header-section">
+
+                </div>
+                <!-- END Left Section -->
+                <!-- Right Section -->
+                <div class="content-header-section">
+                    <ul class="nav-main-header">
+                        <li>
+                            <a class="active" href="@Url.Action("Index", "Home")"><i class="si si-pencil"></i>Registros</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Visualizacion", "Home")"><i class="si si-doc"></i>Visualizacion</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("addPlanos", "Home")"><i class="si si-camera"></i>Agregar Mapas</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Consolidado", "Home")"><i class="fa fa-calculator"></i>Consolidado</a>
+                        </li>
+
+                        @if (Request.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Hola @User.Identity.GetUserName() !
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style=" background-color: #02356D;">
+                                    <a href="@Url.Action("Index", "Manage", null, Request.Url.Scheme)" class="dropdown-item">Mi perfil</a>
+                                    @if (User.IsInRole("ADMIN"))
+                                    {
+                                        <a href="@Url.Action("ManageUserRoles", "Roles", null, Request.Url.Scheme)" class="dropdown-item">Gestionar Roles</a>
+                                    }
+                                    <div class="dropdown-divider"></div>
+                                    <a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item">Cerrar sesión</a>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Registrarse", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                            <li>@Html.ActionLink("Iniciar sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                        }
+
+                        @if (Request.IsAuthenticated)
+                        {
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                            }
+                        }
+                    </ul>
+                    <!-- END Header Navigation -->
+                    <!-- Toggle Sidebar -->
+                    <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                    <button type="button" class="btn btn-circle btn-dual-secondary d-lg-none" data-toggle="layout" data-action="sidebar_toggle">
+                        <i class="fa fa-navicon"></i>
+                    </button>
+                    <!-- END Toggle Sidebar -->
+                </div>
+                <!-- END Right Section -->
+            </div>
+            <!-- END Header Content -->
+            <!-- Header Search -->
+            <div id="page-header-search" class="overlay-header">
+                <div class="content-header content-header-fullrow">
+                    <form>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <!-- Close Search Section -->
+                                <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                                <button type="button" class="btn btn-secondary px-15" data-toggle="layout" data-action="header_search_off">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <!-- END Close Search Section -->
+                            </div>
+                            <input type="text" class="form-control" placeholder="Search or hit ESC.." id="page-header-search-input" name="page-header-search-input">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-secondary px-15">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- END Header Search -->
+            <!-- Header Loader -->
+            <div id="page-header-loader" class="overlay-header bg-primary">
+                <div class="content-header content-header-fullrow text-center">
+                    <div class="content-header-item">
+                        <i class="fa fa-sun-o fa-spin text-white"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- END Header Loader -->
+        </header>
+        <!-- END Header -->
+        <!-- Main Container -->
+        <main id="main-container">
+            <!-- Header -->
+            <!-- <div class="bg-primary-dark">-->
+            <div class="c-layout-header c-layout-header-3 c-bg-dark" id="header" style="background-color: #02356D;">
+                <div class="content content-top">
+                    <div class="row push">
+                        <div style='border-width: 0px; border-color: #FF4040;'><img alt="logo cse pie" data-align="center" data-entity-type="file" data-entity-uuid="729c5c0e-de5c-4d08-af76-3eb1afd6309e" src="~/Content/imagen 02 200px.png"></div>
+                        <div class="col-md py-10 d-md-flex align-items-md-center text-center">
+                            <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item">
+                                <!-- <img src="~/Content/imagen 02 200px.png" style="background-color: transparent" class="img-thumbnail" />-->
+                                <h1 class="text-white mb-0">
+                                    <marquee border="1" width="100%">División General de Cartografía y Estadística.</marquee>
+                                    <span class="font-w300">Plataforma Electoral</span>
+                                    <span class="font-w400 font-size-lg text-white-op d-none d-md-inline-block"> ( C.V./J.R.V Elección Nacional 2021 )</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END Header -->
+            <!-- Page Content -->
+            <div class="bg-gray-lighter">
+
+                <!-- Content -->
+                <div class="content">
+                    @RenderBody()
+                </div>
+                <!-- END Content -->
+            </div>
+            <!-- END Page Content -->
+
+        </main>
+
+        <!-- Footer -->
+        <!--<div class=" c-postfooter">
+    <div class=" container">-->
+        <!--<div class=" row">-->
+        <!--<div class=" col-sm-12 col-md-6 c-col">
+    <p class="c-copyright c-font-oswald c-font-14">Copyright © CSE Todos los derechos reservados.</p>-->
+        <!--</div>-->
+        <!--</div>
+    </div>-->
+    </div>
+
+        <div class=" c-postfooter">
+            <div class=" container">
+                <div class=" row">
+                    <div class="col-sm-12 col-md-6 c-col">
+                        <p class="c-copyright c-font-oswald c-font-14">Copyright © CSE Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!--End c-postfooter-->
+        <!--<div id="block-footerbottomright">
+    <footer id="page-footer" class="bg-white opacity-0">Copyright © CSE Todos los derechos reservados.</footer>-->
+        <!-- END Footer -->
+        <!--</div>-->
+        <!-- END Page Container -->
+        <!--
+        Codebase JS Core
+
+        Vital libraries and plugins used in all pages. You can choose to not include this file if you would like
+        to handle those dependencies through webpack. Please check out assets/_es6/main/bootstrap.js for more info.
+
+        If you like, you could also include them separately directly from the assets/js/core folder in the following
+        order. That can come in handy if you would like to include a few of them (eg jQuery) from a CDN.
+
+        assets/js/core/jquery.min.js
+        assets/js/core/bootstrap.bundle.min.js
+        assets/js/core/simplebar.min.js
+        assets/js/core/jquery-scrollLock.min.js
+        assets/js/core/jquery.appear.min.js
+        assets/js/core/jquery.countTo.min.js
+        assets/js/core/js.cookie.min.js
+    -->
+        <script src="~/Content/assets/js/codebase.core.min.js"></script>
+
+        <!--
+        Codebase JS
+
+        Custom functionality including Blocks/Layout API as well as other vital and optional helpers
+        webpack is putting everything together at assets/_es6/main/app.js
+    -->
+        <script src="~/Content/assets/js/codebase.app.min.js"></script>
+
+        <!-- Page JS Plugins -->
+        <script src="~/Content/assets/js/plugins/chartjs/Chart.bundle.min.js"></script>
+
+        <!-- Page JS Code -->
+        <script src="~/Content/assets/js/pages/db_corporate.min.js"></script>
+
+        @RenderSection("scripts", required: false)
+</body>
+</html>
