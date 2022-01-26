@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .searchInput {
+        border-radius: 25px;
+        line-height: 25px;
+        font-size: 25pt;
+        text-align: center;
+    }
+
+    .loader {
+        border-top: 16px solid blue;
+        border-right: 16px solid green;
+        border-bottom: 16px solid red;
+
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        animation: spin 2s linear infinite;
+        margin: 0 auto;
+    }
+
+    @@keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+</style>
+
+<form method="post">
+    <div class="row">
+        <h1 style="margin: 0 auto; margin-bottom: 20px;">Busqueda de personas</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <input type="search" class="form-control searchInput" placeholder="Digite aqui..." name="txtSearch" />
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div class="clear" style="margin-top: 15px;"></div>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <span>Buscar por:</span><br />
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="radioBuscarPor" id="radioCedula" value="1" checked="checked">
+                <label class="form-check-label" for="radioCedula">Cedula de identidad</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="radioBuscarPor" id="radioNomApe" value="2">
+                <label class="form-check-label" for="radioNomApe">Nombres y/o apellidos</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="radioBuscarPor" id="radioCV" value="3">
+                <label class="form-check-label" for="radioCV">Centro de votacion</label>
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div class="clear" style="margin-top: 15px;"></div>
+    <div class="row">
+        <div class="col-sm-5"></div>
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-block btn-primary">Buscar</button>
+        </div>
+        <div class="col-sm-5"></div>
+    </div>
+    <div class="clear" style="margin-top: 20px;"></div>
+    <div class="row" id="result">
+        <div class="loader" style="display: none;"></div>
+        <!--ko if: tableResult().length > 0-->
+        <div class="col-sm-12">
+            <table class="table table-hover table-borderless bg-white">
+                <thead>
+                    <tr>
+                        <th>Cedula</th>
+                        <th>Nombre Completo</th>
+                        <th>Sexo</th>
+                        <th>Domicilio</th>
+                        <th>JRV</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: tableResult">
+                    <tr>
+                        <td data-bind="text: ci"></td>
+                        <td data-bind="text: (pnom + ' ' + snom + ', ' + papell + ' ' + sappell)"></td>
+                        <td data-bind="text: sexo"></td>
+                        <td data-bind="text: domicilio"></td>
+                        <td data-bind="text: jrv"></td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--/ko-->
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Scripts/knockout/knockout-3.4.2.js"></script>
+    <script src="~/Scripts/knockout/knockout-3.4.2.debug.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            let bURL = '@Url.Action("Index", "Home", null, Request.Url.Scheme)';
+
+            var resultModel = function () {
+                let self = this;
+                self.tableResult = ko.observableArray([]);
+            };
+
+            let model = new resultModel();
+
+            $('form').submit(function (e) {
+                $('.loader').fadeIn();
+                model.tableResult([]);
+                $.ajax({
+                    url: bURL + 'Search',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        model.tableResult(result);
+
+                        $('.loader').fadeOut();
+                    },
+                    error: function () {
+                        console.log('error');
+                        $('.loader').fadeOut();
+                    }
+                });
+
+                e.preventDefault();
+            });
+
+            ko.applyBindings(model, $('result').get(0));
+        });
+    </script>
+}
