@@ -54,6 +54,13 @@ namespace APPCV_CSE.Controllers
 
                         return Json(qryporNombre, JsonRequestBehavior.AllowGet);
                     }
+                    else if (data.radioBuscarPor == "3")
+                    {
+                        int jrv = int.Parse(data.txtSearch);
+                        var qryPorCV = db.PADRON.Where(cond => cond.jrv == jrv);
+
+                        return Json(qryPorCV, JsonRequestBehavior.AllowGet);
+                    }
                     else
                         return Json(new List<PADRON>(), JsonRequestBehavior.AllowGet);
                 }

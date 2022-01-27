@@ -15,7 +15,6 @@
         border-top: 16px solid blue;
         border-right: 16px solid green;
         border-bottom: 16px solid red;
-
         border-radius: 50%;
         width: 100px;
         height: 100px;
@@ -24,10 +23,16 @@
     }
 
     @@keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 </style>
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
 
 <form method="post">
     <div class="row">
@@ -56,7 +61,7 @@
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="radioBuscarPor" id="radioCV" value="3">
-                <label class="form-check-label" for="radioCV">Centro de votacion</label>
+                <label class="form-check-label" for="radioCV">Junta Receptora de Votos</label>
             </div>
         </div>
         <div class="col-sm-3"></div>
@@ -74,7 +79,7 @@
         <div class="loader" style="display: none;"></div>
         <!--ko if: tableResult().length > 0-->
         <div class="col-sm-12">
-            <table class="table table-hover table-borderless bg-white">
+            <table class="table table-hover table-borderless bg-white" id="table">
                 <thead>
                     <tr>
                         <th>Cedula</th>
@@ -101,11 +106,30 @@
 </form>
 
 @section scripts{
+    <script type="text/javascript" src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/knockout/knockout-3.4.2.js"></script>
     <script src="~/Scripts/knockout/knockout-3.4.2.debug.js"></script>
     <script type="text/javascript">
         $(function () {
             let bURL = '@Url.Action("Index", "Home", null, Request.Url.Scheme)';
+            let table;
+            let tableOptions = {
+                lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
+                language: {
+                    "lengthMenu": "Mostrar _MENU_ filas por pagina",
+                    "zeroRecords": "Nada encontrado - sorry",
+                    "info": "Pagina _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros",
+                    "infoFiltered": "(filtrado de _MAX_ filas en total)",
+                    "search": "Buscar: ",
+                    "paginate": {
+                        "first": "Inicio",
+                        "last": "Final",
+                        "next": "Siguient",
+                        "previous": "Anterior"
+                    }
+                }
+            };
 
             var resultModel = function () {
                 let self = this;
@@ -116,13 +140,21 @@
 
             $('form').submit(function (e) {
                 $('.loader').fadeIn();
+                if (table)
+                    table.destroy();
+
                 model.tableResult([]);
                 $.ajax({
                     url: bURL + 'Search',
                     type: 'POST',
                     data: $(this).serialize(),
                     success: function (result) {
-                        model.tableResult(result);
+                        if (result.length > 0) {
+                            model.tableResult(result);
+                            setTimeout(function () {
+                                table = $('#table').DataTable(tableOptions);
+                            }, 300);
+                        }
 
                         $('.loader').fadeOut();
                     },
@@ -133,6 +165,10 @@
                 });
 
                 e.preventDefault();
+            });
+
+            $(':radio[name="radioBuscarPor"]').change(function () {
+                $('input[name="txtSearch"]').val('');
             });
 
             ko.applyBindings(model, $('result').get(0));
