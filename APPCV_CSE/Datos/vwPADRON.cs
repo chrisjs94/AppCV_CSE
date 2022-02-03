@@ -12,7 +12,7 @@ namespace APPCV_CSE.Datos
     using System;
     using System.Collections.Generic;
     
-    public partial class PADRON
+    public partial class vwPADRON
     {
         public Nullable<int> id { get; set; }
         public string tipo_id { get; set; }
@@ -31,5 +31,10 @@ namespace APPCV_CSE.Datos
         public Nullable<System.DateTime> f_solicitud { get; set; }
         public Nullable<System.DateTime> f_expedi { get; set; }
         public Nullable<System.DateTime> f_inclus { get; set; }
+        public int id_JRV { get; set; }
+        public string codeJRV { get; set; }
+        public Nullable<int> cantInscritos { get; set; }
+        public Nullable<int> cantVerificados { get; set; }
+        public Nullable<int> id_CentroVotacion { get; set; }
     }
 }

@@ -32,8 +32,8 @@ namespace APPCV_CSE.Datos
         public virtual DbSet<cat_TipoCV> cat_TipoCV { get; set; }
         public virtual DbSet<CentrosVotacion> CentrosVotacion { get; set; }
         public virtual DbSet<GaleriaCentroVotacion> GaleriaCentroVotacion { get; set; }
-        public virtual DbSet<PADRON> PADRON { get; set; }
         public virtual DbSet<JRV> JRV { get; set; }
+        public virtual DbSet<vwPADRON> vwPADRON { get; set; }
     
         public virtual ObjectResult<TotalConsolidado_Result> TotalConsolidado(Nullable<int> iddpto)
         {

@@ -13,8 +13,8 @@
         <AssociationConnector Association="DBJUNTASModel.FK_Municipios_Departamento" />
         <AssociationConnector Association="DBJUNTASModel.FK_Municipio_CentroVotacion" />
         <AssociationConnector Association="DBJUNTASModel.FK_Galeria_CentroVotacion" />
-        <EntityTypeShape EntityType="DBJUNTASModel.PADRON" Width="1.5" PointX="3.375" PointY="6.75" />
         <EntityTypeShape EntityType="DBJUNTASModel.JRV" Width="1.5" PointX="5.375" PointY="6.75" />
+        <EntityTypeShape EntityType="DBJUNTASModel.vwPADRON" Width="1.5" PointX="7.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -72,9 +72,13 @@
           <Property Name="cantVerificados" Type="int" />
           <Property Name="id_CentroVotacion" Type="int" />
         </EntityType>
-        <EntityType Name="PADRON">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DBJUNTAS.dbo.vwPADRON' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwPADRON">
           <Key>
             <PropertyRef Name="ci" />
+            <PropertyRef Name="id_JRV" />
+            <PropertyRef Name="codeJRV" />
           </Key>
           <Property Name="id" Type="int" />
           <Property Name="tipo_id" Type="nvarchar" MaxLength="50" />
@@ -93,6 +97,11 @@
           <Property Name="f_solicitud" Type="datetime2" Precision="7" />
           <Property Name="f_expedi" Type="datetime2" Precision="7" />
           <Property Name="f_inclus" Type="datetime2" Precision="7" />
+          <Property Name="id_JRV" Type="int" Nullable="false" />
+          <Property Name="codeJRV" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="cantInscritos" Type="int" />
+          <Property Name="cantVerificados" Type="int" />
+          <Property Name="id_CentroVotacion" Type="int" />
         </EntityType>
         <Function Name="TotalConsolidado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="iddpto" Type="int" Mode="In" />
@@ -104,7 +113,32 @@
           <EntitySet Name="CentrosVotacion" EntityType="Self.CentrosVotacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GaleriaCentroVotacion" EntityType="Self.GaleriaCentroVotacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JRV" EntityType="Self.JRV" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PADRON" EntityType="Self.PADRON" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vwPADRON" EntityType="Self.vwPADRON" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwPADRON].[id] AS [id], 
+    [vwPADRON].[tipo_id] AS [tipo_id], 
+    [vwPADRON].[expediente] AS [expediente], 
+    [vwPADRON].[ci] AS [ci], 
+    [vwPADRON].[cod_munic] AS [cod_munic], 
+    [vwPADRON].[jrv] AS [jrv], 
+    [vwPADRON].[papell] AS [papell], 
+    [vwPADRON].[sappell] AS [sappell], 
+    [vwPADRON].[pnom] AS [pnom], 
+    [vwPADRON].[snom] AS [snom], 
+    [vwPADRON].[lugar_nac] AS [lugar_nac], 
+    [vwPADRON].[fecha_nac] AS [fecha_nac], 
+    [vwPADRON].[sexo] AS [sexo], 
+    [vwPADRON].[domicilio] AS [domicilio], 
+    [vwPADRON].[f_solicitud] AS [f_solicitud], 
+    [vwPADRON].[f_expedi] AS [f_expedi], 
+    [vwPADRON].[f_inclus] AS [f_inclus], 
+    [vwPADRON].[id_JRV] AS [id_JRV], 
+    [vwPADRON].[codeJRV] AS [codeJRV], 
+    [vwPADRON].[cantInscritos] AS [cantInscritos], 
+    [vwPADRON].[cantVerificados] AS [cantVerificados], 
+    [vwPADRON].[id_CentroVotacion] AS [id_CentroVotacion]
+    FROM [dbo].[vwPADRON] AS [vwPADRON]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -131,8 +165,8 @@
           <FunctionImport Name="TotalConsolidado" ReturnType="Collection(DBJUNTASModel.TotalConsolidado_Result)">
           <Parameter Name="iddpto" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="PADRON" EntityType="DBJUNTASModel.PADRON" />
           <EntitySet Name="JRV" EntityType="DBJUNTASModel.JRV" />
+          <EntitySet Name="vwPADRON" EntityType="DBJUNTASModel.vwPADRON" />
         </EntityContainer>
         <EntityType Name="cat_Departamento">
           <Key>
@@ -247,9 +281,21 @@
           <Property Type="Int32" Name="RURALINSCRITOS" Nullable="true" />
           <Property Type="Int32" Name="TOTALINSCRITOS" Nullable="true" />
         </ComplexType>
-        <EntityType Name="PADRON">
+        <EntityType Name="JRV">
+          <Key>
+            <PropertyRef Name="id_JRV" />
+          </Key>
+          <Property Name="id_JRV" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="codeJRV" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cantInscritos" Type="Int32" />
+          <Property Name="cantVerificados" Type="Int32" />
+          <Property Name="id_CentroVotacion" Type="Int32" />
+        </EntityType>
+        <EntityType Name="vwPADRON">
           <Key>
             <PropertyRef Name="ci" />
+            <PropertyRef Name="id_JRV" />
+            <PropertyRef Name="codeJRV" />
           </Key>
           <Property Name="id" Type="Int32" />
           <Property Name="tipo_id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -268,12 +314,7 @@
           <Property Name="f_solicitud" Type="DateTime" Precision="7" />
           <Property Name="f_expedi" Type="DateTime" Precision="7" />
           <Property Name="f_inclus" Type="DateTime" Precision="7" />
-        </EntityType>
-        <EntityType Name="JRV">
-          <Key>
-            <PropertyRef Name="id_JRV" />
-          </Key>
-          <Property Name="id_JRV" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_JRV" Type="Int32" Nullable="false" />
           <Property Name="codeJRV" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="cantInscritos" Type="Int32" />
           <Property Name="cantVerificados" Type="Int32" />
@@ -365,9 +406,25 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="PADRON">
-            <EntityTypeMapping TypeName="DBJUNTASModel.PADRON">
-              <MappingFragment StoreEntitySet="PADRON">
+          <EntitySetMapping Name="JRV">
+            <EntityTypeMapping TypeName="DBJUNTASModel.JRV">
+              <MappingFragment StoreEntitySet="JRV">
+                <ScalarProperty Name="id_CentroVotacion" ColumnName="id_CentroVotacion" />
+                <ScalarProperty Name="cantVerificados" ColumnName="cantVerificados" />
+                <ScalarProperty Name="cantInscritos" ColumnName="cantInscritos" />
+                <ScalarProperty Name="codeJRV" ColumnName="codeJRV" />
+                <ScalarProperty Name="id_JRV" ColumnName="id_JRV" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwPADRON">
+            <EntityTypeMapping TypeName="DBJUNTASModel.vwPADRON">
+              <MappingFragment StoreEntitySet="vwPADRON">
+                <ScalarProperty Name="id_CentroVotacion" ColumnName="id_CentroVotacion" />
+                <ScalarProperty Name="cantVerificados" ColumnName="cantVerificados" />
+                <ScalarProperty Name="cantInscritos" ColumnName="cantInscritos" />
+                <ScalarProperty Name="codeJRV" ColumnName="codeJRV" />
+                <ScalarProperty Name="id_JRV" ColumnName="id_JRV" />
                 <ScalarProperty Name="f_inclus" ColumnName="f_inclus" />
                 <ScalarProperty Name="f_expedi" ColumnName="f_expedi" />
                 <ScalarProperty Name="f_solicitud" ColumnName="f_solicitud" />
@@ -385,17 +442,6 @@
                 <ScalarProperty Name="expediente" ColumnName="expediente" />
                 <ScalarProperty Name="tipo_id" ColumnName="tipo_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="JRV">
-            <EntityTypeMapping TypeName="DBJUNTASModel.JRV">
-              <MappingFragment StoreEntitySet="JRV">
-                <ScalarProperty Name="id_CentroVotacion" ColumnName="id_CentroVotacion" />
-                <ScalarProperty Name="cantVerificados" ColumnName="cantVerificados" />
-                <ScalarProperty Name="cantInscritos" ColumnName="cantInscritos" />
-                <ScalarProperty Name="codeJRV" ColumnName="codeJRV" />
-                <ScalarProperty Name="id_JRV" ColumnName="id_JRV" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

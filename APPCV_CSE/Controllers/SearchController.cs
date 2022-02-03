@@ -4,6 +4,7 @@ using APPCV_CSE.Datos;
 using APPCV_CSE.Models;
 using System.Linq;
 using System.Collections.Generic;
+using System.Data.Entity.SqlServer;
 
 namespace APPCV_CSE.Controllers
 {
@@ -33,14 +34,33 @@ namespace APPCV_CSE.Controllers
             {
                 if (!String.IsNullOrEmpty(data.txtSearch))
                 {
+                    var qry = from x in db.vwPADRON
+                              select new
+                              {
+                                  x.ci,
+                                  nombrecompleto = x.papell + " " + x.sappell + ", " + x.pnom + " " + x.snom,
+                                  x.papell,
+                                  x.sappell,
+                                  x.pnom,
+                                  x.snom,
+                                  x.domicilio,
+                                  x.lugar_nac,
+                                  fecha_nac = SqlFunctions.DatePart("dd", x.fecha_nac) + " de " + SqlFunctions.DateName("MM", x.fecha_nac) + " de " + SqlFunctions.DatePart("yyyy", x.fecha_nac),
+                                  x.jrv,
+                                  x.cantInscritos,
+                                  x.cantVerificados,
+                                  x.sexo,
+                                  galeria = from y in db.GaleriaCentroVotacion where y.id_CentroVotacion == x.id_CentroVotacion select y.fotoUrl
+                              };
+                    string strqury = qry.ToString();
                     if (data.radioBuscarPor == "1") //Cedula de identidad
                     {
-                        var qryporCedula = db.PADRON.Where(cond => cond.ci.ToUpper() == data.txtSearch.ToUpper()).ToList();
+                        var qryporCedula = qry.Where(cond => cond.ci == data.txtSearch.ToUpper()).ToList();
                         return Json(qryporCedula, JsonRequestBehavior.AllowGet);
                     }
                     else if (data.radioBuscarPor == "2") //Nombre y/o apellido
                     {
-                        var qryporNombre = db.PADRON.Where(cond =>
+                        var qryporNombre = qry.Where(cond =>
                         new string[]
                         {
                             (cond.pnom + cond.snom + cond.papell + cond.sappell).Replace(" ", "").ToUpper(),
@@ -57,12 +77,12 @@ namespace APPCV_CSE.Controllers
                     else if (data.radioBuscarPor == "3")
                     {
                         int jrv = int.Parse(data.txtSearch);
-                        var qryPorCV = db.PADRON.Where(cond => cond.jrv == jrv);
+                        var qryPorCV = qry.Where(cond => cond.jrv == jrv);
 
                         return Json(qryPorCV, JsonRequestBehavior.AllowGet);
                     }
                     else
-                        return Json(new List<PADRON>(), JsonRequestBehavior.AllowGet);
+                        return Json(new List<vwPADRON>(), JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
