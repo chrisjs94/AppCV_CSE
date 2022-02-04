@@ -50,6 +50,8 @@ namespace APPCV_CSE.Controllers
                                   x.cantInscritos,
                                   x.cantVerificados,
                                   x.sexo,
+                                  x.latitude,
+                                  x.longitude,
                                   galeria = from y in db.GaleriaCentroVotacion where y.id_CentroVotacion == x.id_CentroVotacion select y.fotoUrl
                               };
                     string strqury = qry.ToString();

@@ -3,6 +3,7 @@
     ViewBag.Title = "Busqueda";
 }
 
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
 <style>
     .searchInput {
         border-radius: 25px;
@@ -31,8 +32,14 @@
             transform: rotate(360deg);
         }
     }
+
+    @@media (min-width: 992px) {
+        .modal-lg, .modal-xl {
+            max-width: 1100px;
+        }
+    }
 </style>
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+
 
 <form method="post">
     <div class="row">
@@ -104,9 +111,8 @@
     </div>
 </form>
 
-
 <div class="modal" tabindex="-1" role="dialog" id="modalInfo">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Mas Informacion</h5>
@@ -124,6 +130,7 @@
     <script type="text/javascript" src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/knockout/knockout-3.4.2.js"></script>
     <script src="~/Scripts/knockout/knockout-3.4.2.debug.js"></script>
+    <script src="//maps.googleapis.com/maps/api/js"></script>
     <script type="text/javascript">
         $(function () {
             let bURL = '@Url.Action("Index", "Home", null, Request.Url.Scheme)';
@@ -146,7 +153,25 @@
                 }
             };
 
-            var resultModel = function () {
+            let initializeGMap = function(lat, lng) {
+                myLatlng = new google.maps.LatLng(lat, lng);
+
+                var myOptions = {
+                    zoom: 18,
+                    zoomControl: true,
+                    center: myLatlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+                myMarker = new google.maps.Marker({
+                    position: myLatlng
+                });
+                myMarker.setMap(map);
+            }
+
+            let resultModel = function () {
                 let self = this;
                 self.tableResult = ko.observableArray([]);
 
@@ -158,10 +183,6 @@
                             itemsGaleria += `
                                 <div class="carousel-item ${index == 1 ? 'active' : ''}">
                                   <img class="d-block w-100" alt="" src="${bURL + img}">
-                                   <div class="carousel-caption d-none d-md-block">
-                                        <h5>...</h5>
-                                        <p>...</p>
-                                    </div>
                                 </div>
                             `;
                             index++;
@@ -169,27 +190,36 @@
                     }
 
                     let info = `
-                        <strong>Cedula: </strong> ${item.ci}
-                        <br/><strong>Nombre completo: </strong> ${item.nombrecompleto}
-                        <br/><strong>Fecha de nacimiento: </strong> ${item.fecha_nac}
-                        <br/><strong>Domicilio: </strong> ${item.domicilio}
+                        <div class="row">
+                            <div class="col">
+                                <strong>Cedula: </strong> ${item.ci}
+                                <br/><strong>Nombre completo: </strong> ${item.nombrecompleto}
+                                <br/><strong>Fecha de nacimiento: </strong> ${item.fecha_nac}
+                                <br/><strong>Domicilio: </strong> ${item.domicilio}
 
-                        <h5 style="margin: 10px 0 10px 0">Informacion del Centro de Votacion</h5>
-                        <strong>JRV: </strong> ${item.jrv}
-                        <br/><strong>Inscritos: </strong> ${item.cantInscritos}
-                        
-                        <div class="carousel slide" data-ride="carousel" style="margin-top: 20px;">
-                          <div class="carousel-inner">
-                            ${itemsGaleria}
-                          </div>
-                          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                          </a>
-                          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                          </a>
+                                <h5 style="margin: 10px 0 10px 0">Informacion del Centro de Votacion</h5>
+                                <strong>JRV: </strong> ${item.jrv}
+                                <br/><strong>Inscritos: </strong> ${item.cantInscritos}
+
+                                <div id="imageCarousel" class="carousel slide" data-ride="carousel" style="margin-top: 20px;">
+                                  <div class="carousel-inner">
+                                    ${itemsGaleria}
+                                  </div>
+                                    <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
+                                       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                       <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
+                                       <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                       <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="location-map" id="location-map">
+                                  <div style="width: 100%; height: 500px;" id="map_canvas"></div>
+                                </div>
+                            </div>
                         </div>
                     `;
                     $('#modal-body-info-cv').html(info);
@@ -198,6 +228,8 @@
                         $('#modalInfo').modal('show');
 
                         $('.carousel').carousel();
+
+                        initializeGMap(item.latitude, item.longitude);
                     }, 200);
                 }
             };

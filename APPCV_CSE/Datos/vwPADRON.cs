@@ -36,5 +36,7 @@ namespace APPCV_CSE.Datos
         public Nullable<int> cantInscritos { get; set; }
         public Nullable<int> cantVerificados { get; set; }
         public Nullable<int> id_CentroVotacion { get; set; }
+        public Nullable<double> latitude { get; set; }
+        public Nullable<double> longitude { get; set; }
     }
 }

@@ -102,6 +102,8 @@ warning 6002: The table/view 'DBJUNTAS.dbo.vwPADRON' does not have a primary key
           <Property Name="cantInscritos" Type="int" />
           <Property Name="cantVerificados" Type="int" />
           <Property Name="id_CentroVotacion" Type="int" />
+          <Property Name="latitude" Type="float" />
+          <Property Name="longitude" Type="float" />
         </EntityType>
         <Function Name="TotalConsolidado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="iddpto" Type="int" Mode="In" />
@@ -136,7 +138,9 @@ warning 6002: The table/view 'DBJUNTAS.dbo.vwPADRON' does not have a primary key
     [vwPADRON].[codeJRV] AS [codeJRV], 
     [vwPADRON].[cantInscritos] AS [cantInscritos], 
     [vwPADRON].[cantVerificados] AS [cantVerificados], 
-    [vwPADRON].[id_CentroVotacion] AS [id_CentroVotacion]
+    [vwPADRON].[id_CentroVotacion] AS [id_CentroVotacion], 
+    [vwPADRON].[latitude] AS [latitude], 
+    [vwPADRON].[longitude] AS [longitude]
     FROM [dbo].[vwPADRON] AS [vwPADRON]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
@@ -319,6 +323,8 @@ warning 6002: The table/view 'DBJUNTAS.dbo.vwPADRON' does not have a primary key
           <Property Name="cantInscritos" Type="Int32" />
           <Property Name="cantVerificados" Type="Int32" />
           <Property Name="id_CentroVotacion" Type="Int32" />
+          <Property Name="latitude" Type="Double" />
+          <Property Name="longitude" Type="Double" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -420,6 +426,8 @@ warning 6002: The table/view 'DBJUNTAS.dbo.vwPADRON' does not have a primary key
           <EntitySetMapping Name="vwPADRON">
             <EntityTypeMapping TypeName="DBJUNTASModel.vwPADRON">
               <MappingFragment StoreEntitySet="vwPADRON">
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
                 <ScalarProperty Name="id_CentroVotacion" ColumnName="id_CentroVotacion" />
                 <ScalarProperty Name="cantVerificados" ColumnName="cantVerificados" />
                 <ScalarProperty Name="cantInscritos" ColumnName="cantInscritos" />
