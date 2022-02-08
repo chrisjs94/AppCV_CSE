@@ -66,10 +66,10 @@
                 <input class="form-check-input" type="radio" name="radioBuscarPor" id="radioNomApe" value="2">
                 <label class="form-check-label" for="radioNomApe">Nombres y/o apellidos</label>
             </div>
-            <div class="form-check form-check-inline">
+            @*<div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="radioBuscarPor" id="radioCV" value="3">
                 <label class="form-check-label" for="radioCV">Junta Receptora de Votos</label>
-            </div>
+            </div>*@
         </div>
         <div class="col-sm-3"></div>
     </div>
@@ -127,10 +127,10 @@
 </div>
 
 @section scripts{
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnXmNv3pT8afqJBRsq-9zVATWTha6R6i0" async></script>
     <script type="text/javascript" src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
-    <script src="~/Scripts/knockout/knockout-3.4.2.js"></script>
-    <script src="~/Scripts/knockout/knockout-3.4.2.debug.js"></script>
-    <script src="//maps.googleapis.com/maps/api/js"></script>
+    <script type="text/javascript" src="~/Scripts/knockout/knockout-3.4.2.js"></script>
+    <script type="text/javascript" src="~/Scripts/knockout/knockout-3.4.2.debug.js"></script>
     <script type="text/javascript">
         $(function () {
             let bURL = '@Url.Action("Index", "Home", null, Request.Url.Scheme)';
